@@ -1,0 +1,30 @@
+---
+kind: pipeline
+type: docker
+name: Install Kibana WebUI
+
+clone:
+  depth: 1
+
+steps:
+  - name: Deploy
+    image: plugins/ansible:3
+    environment:
+      ANSIBLE_CONFIG: .ansible/ansible.cfg
+    settings:
+      playbook: .ansible/deploy.yaml
+      galaxy: .ansible/roles/requirements.yaml
+      inventory: .ansible/inventory/production/hosts
+      private_key:
+        from_secret: automation_private_key
+      vault_password:
+        from_secret: ansible_vault_password
+      extra_vars: version=production
+
+trigger:
+  branch:
+    - development
+  event:
+    - push
+
+...

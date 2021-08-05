@@ -1,0 +1,29 @@
+# docker-compose.yaml
+
+version: '3.8'
+services: 
+
+  webui:
+    image: kibana:7.13.2
+    volumes:
+      - {{ ssl_cert_dir }}/:/etc/pki/tls/certs/
+    environment:
+      # https://www.elastic.co/guide/en/kibana/current/settings.html
+      # https://www.elastic.co/guide/en/kibana/current/docker.html#environment-variable-config
+      - ELASTICSEARCH_HOSTS={{ elastic_url }}
+      - ELASTICSEARCH_USERNAME={{ elastic_username }}
+      - ELASTICSEARCH_PASSWORD={{ elastic_password }}
+      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/etc/pki/tls/certs/{{ ssl_cert_filename }}
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.http.services.{{ repository }}.loadbalancer.server.port=5601
+        - traefik.http.routers.{{ repository }}.rule=Host(`{{ domain }}`)
+        - traefik.http.routers.{{ repository }}.service={{ repository }}
+    networks:
+      - {{ docker_network }}
+      
+networks:
+  {{ docker_network }}:
+    external:
+      name: {{ docker_network }}
