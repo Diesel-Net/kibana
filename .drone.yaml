@@ -11,19 +11,21 @@ steps:
     image: plugins/ansible:3
     environment:
       ANSIBLE_CONFIG: .ansible/ansible.cfg
+      ELASTIC_PASSWORD:
+        from_secret: elastic_pass
     settings:
       playbook: .ansible/deploy.yaml
       galaxy: .ansible/roles/requirements.yaml
       inventory: .ansible/inventory/production/hosts
       private_key:
-        from_secret: automation_private_key
+        from_secret: automation_id_rsa
       vault_password:
         from_secret: ansible_vault_password
       extra_vars: version=production
 
 trigger:
   branch:
-    - development
+    - stable
   event:
     - push
 

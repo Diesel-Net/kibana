@@ -20,6 +20,7 @@ services:
         - traefik.http.services.{{ repository }}.loadbalancer.server.port=5601
         - traefik.http.routers.{{ repository }}.rule=Host(`{{ domain }}`)
         - traefik.http.routers.{{ repository }}.service={{ repository }}
+        - traefik.http.routers.{{ repository }}.tls.certresolver=step-ca
     networks:
       - {{ docker_network }}
       
