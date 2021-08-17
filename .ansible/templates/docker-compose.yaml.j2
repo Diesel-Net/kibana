@@ -4,7 +4,7 @@ version: '3.8'
 services: 
 
   webui:
-    image: kibana:7.13.2
+    image: kibana:7.14.0
     volumes:
       - {{ ssl_cert_dir }}/:/etc/pki/tls/certs/
     environment:
