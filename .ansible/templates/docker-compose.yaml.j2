@@ -14,6 +14,7 @@ services:
       - ELASTICSEARCH_USERNAME={{ elastic_username }}
       - ELASTICSEARCH_PASSWORD={{ elastic_password }}
       - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/etc/pki/tls/certs/{{ ssl_cert_filename }}
+      - SERVER_PUBLICBASEURL=https://{{ domain }}
     deploy:
       labels:
         - traefik.enable=true
